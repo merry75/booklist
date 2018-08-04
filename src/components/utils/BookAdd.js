@@ -23,7 +23,13 @@ class BookAdd extends Component {
 
   toggle() {
     this.setState({
-      modal: !this.state.modal
+      ...this.state,
+      modal: !this.state.modal,
+      id: "",
+      title: "",
+      author: "",
+      date: moment().format("YYYY-MM-DD"),
+      validateMessage: {}
     });
   }
 
@@ -47,12 +53,29 @@ class BookAdd extends Component {
   }
 
   onAdd() {
-    if (
-      !this.state.title ||
-      !this.state.author ||
-      this.props.books.filter(v => v.title === this.state.title).length !== 0
-    ) {
-      return <div>test</div>;
+    if (!this.state.author && !this.state.title) {
+      return this.setState({
+        validateMessage: {
+          author: "This field is required",
+          title: "This field is required"
+        }
+      });
+    }
+
+    if (!this.state.author) {
+      return this.setState({
+        validateMessage: {
+          author: "This field is required"
+        }
+      });
+    }
+
+    if (!this.state.title) {
+      return this.setState({
+        validateMessage: {
+          title: "This field is required"
+        }
+      });
     }
 
     this.props.addBook({
@@ -62,6 +85,7 @@ class BookAdd extends Component {
       author: this.state.author,
       date: this.state.date
     });
+
     this.toggle();
   }
 
@@ -121,7 +145,11 @@ class BookAdd extends Component {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={() => this.onAdd()}>
+            <Button
+              color="primary"
+              onClick={() => this.onAdd()}
+              onChange={e => this.onAddValue("title", e.target.value)}
+            >
               Add
             </Button>{" "}
             <Button color="secondary" onClick={this.toggle}>
@@ -142,128 +170,3 @@ export default connect(
   mapStateToProps,
   { addBook }
 )(BookAdd);
-
-// import React, { Component } from "react";
-// import { connect } from "react-redux";
-// import { addBook } from "../../actions/bookActions";
-// import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-// // import moment from "moment";
-
-// class BookAdd extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       modal: false,
-//       title: "",
-//       author: ""
-//       // ,
-//       // date: moment().format("YYYY-MM-DD"),
-//       // validateMessage: {}
-//     };
-
-//     // this.toggle = this.toggle.bind(this);
-//   }
-
-//   toggle() {
-//     this.setState({
-//       modal: !this.state.modal
-//     });
-//   }
-
-//   handleTitleChange(e) {
-//     this.setState({ title: e.target.value });
-//   }
-
-//   handleAuthorChange(e) {
-//     this.setState({ author: e.target.value });
-//   }
-
-//   // handleDateChange(e) {
-//   //   this.setState({ date: e.target.value });
-//   // }
-
-//   onAdd() {
-//     this.props.addBook(
-//       this.state.title,
-//       this.state.author
-//       // , this.state.date
-//     );
-//     this.toggle();
-//     this.setState({
-//       title: "",
-//       author: ""
-//       // ,
-//       // date: moment().format("YYYY-MM-DD")
-//     });
-//   }
-
-//   render() {
-//     return (
-//       <div>
-//         <Button
-//           className="btn btn-md btn-info mr-2"
-//           onClick={() => this.toggle()}
-//         >
-//           {this.props.buttonLabel}Add a Book
-//         </Button>
-//         <Modal
-//           isOpen={this.state.modal}
-//           toggle={() => this.toggle()}
-//           className={this.props.className}
-//         >
-//           <ModalHeader toggle={() => this.toggle()}>Add a Book</ModalHeader>
-//           <ModalBody>
-//             <form>
-//               <div>
-//                 <label htmlFor="book-title">Title </label>
-//                 <input
-//                   className="form-control"
-//                   type="text"
-//                   onChange={e => this.handleTitleChange(e)}
-//                   value={this.state.title}
-//                   name="book-title"
-//                   id="book-title"
-//                 />
-//               </div>
-//               <div>
-//                 <label htmlFor="book-author">Author </label>
-//                 <input
-//                   className="form-control"
-//                   type="text"
-//                   onChange={e => this.handleAuthorChange(e)}
-//                   value={this.state.author}
-//                   name="book-author"
-//                   id="book-author"
-//                 />
-//               </div>
-//               <div>
-//                 <label htmlFor="book-date">Date </label>
-//                 <input
-//                   className="form-control"
-//                   type="text"
-//                   onChange={e => this.handleDateChange(e)}
-//                   value={this.state.date}
-//                   name="book-date"
-//                   id="book-date"
-//                 />
-//               </div>
-//             </form>
-//           </ModalBody>
-//           <ModalFooter>
-//             <Button color="primary" onClick={() => this.onAdd()}>
-//               Add
-//             </Button>{" "}
-//             <Button color="secondary" onClick={() => this.toggle()}>
-//               Cancel
-//             </Button>
-//           </ModalFooter>
-//         </Modal>
-//       </div>
-//     );
-//   }
-// }
-
-// export default connect(
-//   null,
-//   { addBook }
-// )(BookAdd);

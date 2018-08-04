@@ -49,11 +49,38 @@ class BookEdit extends Component {
 
   onEdit() {
     if (
-      !this.state.title ||
-      !this.state.author ||
       this.props.books.filter(v => v.title === this.state.title).length !== 0
     ) {
-      return;
+      return this.setState({
+        validateMessage: {
+          title: "Already exist"
+        }
+      });
+    }
+
+    if (!this.state.author && !this.state.title) {
+      return this.setState({
+        validateMessage: {
+          author: "This field is required",
+          title: "This field is required"
+        }
+      });
+    }
+
+    if (!this.state.author) {
+      return this.setState({
+        validateMessage: {
+          author: "This field is required"
+        }
+      });
+    }
+
+    if (!this.state.title) {
+      return this.setState({
+        validateMessage: {
+          title: "This field is required"
+        }
+      });
     }
 
     this.props.editBook({
