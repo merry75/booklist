@@ -53,6 +53,29 @@ class BookAdd extends Component {
   }
 
   onAdd() {
+    if (
+      this.props.books.filter(v => v.title === this.state.title).length !== 0 &&
+      !this.state.author
+    ) {
+      return this.setState({
+        validateMessage: {
+          title: "Already exist",
+          author: "This field is required"
+        }
+      });
+    }
+
+    if (
+      this.props.books.filter(v => v.title === this.state.title).length !== 0 &&
+      this.state.author
+    ) {
+      return this.setState({
+        validateMessage: {
+          title: "Already exist"
+        }
+      });
+    }
+
     if (!this.state.author && !this.state.title) {
       return this.setState({
         validateMessage: {

@@ -21,7 +21,13 @@ class BookEdit extends Component {
 
   toggle() {
     this.setState({
-      modal: !this.state.modal
+      ...this.state,
+      modal: !this.state.modal,
+      id: "",
+      title: "",
+      author: "",
+      date: moment().format("YYYY-MM-DD"),
+      validateMessage: {}
     });
   }
 
@@ -49,7 +55,20 @@ class BookEdit extends Component {
 
   onEdit() {
     if (
-      this.props.books.filter(v => v.title === this.state.title).length !== 0
+      this.props.books.filter(v => v.title === this.state.title).length !== 0 &&
+      !this.state.author
+    ) {
+      return this.setState({
+        validateMessage: {
+          title: "Already exist",
+          author: "This field is required"
+        }
+      });
+    }
+
+    if (
+      this.props.books.filter(v => v.title === this.state.title).length !== 0 &&
+      this.state.author
     ) {
       return this.setState({
         validateMessage: {
