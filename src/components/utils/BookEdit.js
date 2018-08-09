@@ -23,10 +23,10 @@ class BookEdit extends Component {
     this.setState({
       ...this.state,
       modal: !this.state.modal,
-      id: "",
-      title: "",
-      author: "",
-      date: moment().format("YYYY-MM-DD"),
+      id: this.state.id,
+      title: this.state.title,
+      author: this.state.author,
+      date: this.state.date,
       validateMessage: {}
     });
   }
@@ -116,7 +116,8 @@ class BookEdit extends Component {
     return (
       <div>
         <Button className="btn btn-md btn-info mr-2" onClick={this.toggle}>
-          {this.props.buttonLabel}Edit
+          {this.props.buttonLabel}
+          Edit
         </Button>
         <Modal
           isOpen={this.state.modal}
